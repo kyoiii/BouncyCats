@@ -1,0 +1,198 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://game.gd" id="Game"]
+[ext_resource type="Script" path="res://treats.gd" id="Treats"]
+[ext_resource type="Script" path="res://music.gd" id="Music"]
+[ext_resource type="AudioStream" path="res://audio/meow.wav" id="Meow"]
+[ext_resource type="AudioStream" path="res://audio/happy_meow.wav" id="BounceMeow"]
+[ext_resource type="Texture2D" path="res://art/bg.png" id="Background"]
+[ext_resource type="Script" path="res://disks.gd" id="Disks"]
+[ext_resource type="Texture2D" path="res://art/disk.png" id="DiskTexture"]
+
+[ext_resource type="FontFile" path="res://art/fonts/MeaCulpa_Regular.ttf" id="TitleFont"]
+[ext_resource type="FontFile" path="res://art/fonts/HiMelody_Latin.woff2" id="SmallFont"]
+
+[ext_resource type="PackedScene" path="res://skins.tscn" id="Skins"]
+[ext_resource type="PackedScene" path="res://avatar_picker.tscn" id="Picker"]
+
+[sub_resource type="PhysicsMaterial" id="WallMaterial"]
+friction = 0.0
+bounce = 0.42
+
+[sub_resource type="WorldBoundaryShape2D" id="Edge"]
+
+[node name="Game" type="Node2D"]
+script = ExtResource("Game")
+
+[node name="Skins" parent="." instance=ExtResource("Skins")]
+
+[node name="Music" type="AudioStreamPlayer" parent="."]
+volume_db = -17.0
+script = ExtResource("Music")
+
+[node name="BounceMeow" type="AudioStreamPlayer" parent="."]
+volume_db = -8.0
+stream = ExtResource("BounceMeow")
+
+[node name="Meow" type="AudioStreamPlayer" parent="."]
+volume_db = -5.0
+stream = ExtResource("Meow")
+
+[node name="Background" type="Sprite2D" parent="."]
+z_index = -1
+texture_repeat = 2
+texture_filter = 2
+texture = ExtResource("Background")
+scale = Vector2(3.8, 3.8)
+region_enabled = true
+region_rect = Rect2(-10240, -5760, 20480, 11520)
+
+[node name="Walls" type="StaticBody2D" parent="."]
+collision_layer = 2
+collision_mask = 0
+physics_material_override = SubResource("WallMaterial")
+
+[node name="Left" type="CollisionShape2D" parent="Walls"]
+rotation = 1.5707963
+shape = SubResource("Edge")
+
+[node name="Right" type="CollisionShape2D" parent="Walls"]
+rotation = -1.5707963
+shape = SubResource("Edge")
+
+[node name="Top" type="CollisionShape2D" parent="Walls"]
+rotation = 3.1415927
+shape = SubResource("Edge")
+
+[node name="Bottom" type="CollisionShape2D" parent="Walls"]
+shape = SubResource("Edge")
+
+[node name="PickerBarrier" type="StaticBody2D" parent="."]
+collision_layer = 2
+collision_mask = 0
+physics_material_override = SubResource("WallMaterial")
+
+[node name="Panel" type="CollisionPolygon2D" parent="PickerBarrier"]
+polygon = PackedVector2Array(-83.26371, -24.771461, 0.34832764, -67.274254, 5.5740814, -69.016174, 8.709534, -69.364555, 17.07074, -68.319405, 19.161041, -66.2291, 56.786453, -27.210148, 88.83774, 18.776474, 92.66995, 28.18283, 93.01834, 29.924744, 93.01834, 30.273132, 51.5607, 104.13043, 44.94142, 111.79486, 37.97374, 115.627075, 32.05124, 118.065765, 20.902962, 121.20122, -37.973854, 127.12373, -38.322235, 127.12373, -46.68344, 125.38182, -54.347878, 123.63991, -58.52848, 122.59476, -63.05747, 119.110916, -66.88969, 97.85953)
+
+[node name="Left" type="CollisionPolygon2D" parent="PickerBarrier"]
+polygon = PackedVector2Array(-118.23648, 20.5281, -119.51556, 20.847868, -119.83533, 20.847868, -127.29656, 26.92345, -127.50974, 26.92345, -127.50974, 27.456394, -127.50974, 27.776161, -127.829506, 27.989342, -127.829506, 28.09593, -128.46904, 27.882751, -128.68222, 27.882751, -129.74811, 28.948643, -129.96129, 28.948643, -130.9206, 30.121124, -131.02719, 30.121124, -131.13377, 30.973835, -131.24036, 30.973835, -131.24036, 32.466087, -130.60083, 33.638565, -130.60083, 33.851746, -126.44385, 37.04942, -126.230675, 37.04942, -125.80431, 37.688953, -125.80431, 37.795544, -120.0485, 42.272285, -120.0485, 42.378876, -118.76943, 42.805233, -118.76943, 42.91182, -117.38377, 42.91182, -116.42447, 42.485466, -116.21129, 42.485466, -115.1454, 41.099808, -115.03881, 41.099808, -114.82563, 40.460274, -114.82563, 39.820736, -115.25199, 39.60756, -115.25199, 39.1812, -114.61246, 38.96802, -114.61246, 38.861435, -97.98454, 38.754845, -97.55819, 38.754845, -96.06594, 37.582363, -95.95935, 37.582363, -95.63959, 36.40988, -95.533, 36.40988, -95.533, 34.811047, -95.42641, 34.811047, -95.63959, 27.776161, -95.63959, 26.390503, -95.95935, 25.964146, -95.95935, 25.750969, -97.23842, 24.791666, -97.23842, 24.685078, -98.517494, 24.36531, -114.61246, 24.36531, -115.25199, 23.725775, -115.35858, 23.725775, -114.82563, 23.19283, -114.82563, 22.97965, -115.571754, 21.593992, -115.571754, 21.380814, -116.21129, 20.954456, -116.21129, 20.847868, -118.23648, 20.42151)
+
+[node name="Right" type="CollisionPolygon2D" parent="PickerBarrier"]
+polygon = PackedVector2Array(118.236404, 20.5281, 119.51547, 20.847868, 119.83524, 20.847868, 127.29648, 26.92345, 127.50966, 26.92345, 127.50966, 27.456394, 127.50966, 27.776161, 127.82942, 27.989342, 127.82942, 28.09593, 128.46896, 27.882751, 128.68214, 27.882751, 129.74803, 28.948643, 129.96121, 28.948643, 130.92052, 30.121124, 131.0271, 30.121124, 131.1337, 30.973835, 131.24028, 30.973835, 131.24028, 32.466087, 130.60074, 33.638565, 130.60074, 33.851746, 126.44377, 37.04942, 126.23059, 37.04942, 125.80423, 37.688953, 125.80423, 37.795544, 120.048416, 42.272285, 120.048416, 42.378876, 118.76935, 42.805233, 118.76935, 42.91182, 117.38369, 42.91182, 116.42439, 42.485466, 116.21121, 42.485466, 115.14532, 41.099808, 115.03873, 41.099808, 114.82555, 40.460274, 114.82555, 39.820736, 115.25191, 39.60756, 115.25191, 39.1812, 114.61237, 38.96802, 114.61237, 38.861435, 97.98447, 38.754845, 97.558105, 38.754845, 96.065865, 37.582363, 95.959274, 37.582363, 95.6395, 36.40988, 95.53291, 36.40988, 95.53291, 34.811047, 95.42632, 34.811047, 95.6395, 27.776161, 95.6395, 26.390503, 95.959274, 25.964146, 95.959274, 25.750969, 97.23834, 24.791666, 97.23834, 24.685078, 98.51741, 24.36531, 114.61237, 24.36531, 115.25191, 23.725775, 115.3585, 23.725775, 114.82555, 23.19283, 114.82555, 22.97965, 115.57167, 21.593992, 115.57167, 21.380814, 116.21121, 20.954456, 116.21121, 20.847868, 118.236404, 20.42151)
+
+[node name="Disks" type="Node2D" parent="."]
+visible = false
+script = ExtResource("Disks")
+
+[node name="First" type="Sprite2D" parent="Disks"]
+scale = Vector2(0.5, 0.5)
+texture = ExtResource("DiskTexture")
+texture_filter = 4
+
+[node name="Second" type="Sprite2D" parent="Disks"]
+scale = Vector2(0.5, 0.5)
+texture = ExtResource("DiskTexture")
+texture_filter = 4
+
+[node name="Treats" type="Node2D" parent="."]
+script = ExtResource("Treats")
+
+[node name="Cats" type="Node2D" parent="."]
+
+[node name="Camera2D" type="Camera2D" parent="."]
+zoom = Vector2(2.4, 2.4)
+process_callback = 0
+
+[node name="SpawnTimer" type="Timer" parent="."]
+wait_time = 1.0
+autostart = true
+
+[node name="BoostNoticeTimer" type="Timer" parent="."]
+wait_time = 2.2
+one_shot = true
+
+[node name="HUD" type="CanvasLayer" parent="."]
+
+[node name="Score" type="Label" parent="HUD"]
+visible = false
+offset_left = 36.0
+offset_top = 18.0
+mouse_filter = 2
+theme_override_colors/font_color = Color(0.85, 0.48, 0.66, 1)
+theme_override_colors/font_outline_color = Color(0.53, 0.26, 0.40, 0.88)
+theme_override_constants/outline_size = 1
+theme_override_fonts/font = ExtResource("SmallFont")
+theme_override_font_sizes/font_size = 57
+text = "0"
+
+[node name="HighScore" type="Label" parent="HUD"]
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -520.0
+offset_right = -36.0
+offset_top = 18.0
+horizontal_alignment = 2
+mouse_filter = 2
+theme_override_colors/font_color = Color(0.85, 0.48, 0.66, 1)
+theme_override_colors/font_outline_color = Color(0.53, 0.26, 0.40, 0.88)
+theme_override_constants/outline_size = 1
+theme_override_fonts/font = ExtResource("SmallFont")
+theme_override_font_sizes/font_size = 57
+text = "Best 0"
+
+[node name="Title" type="Label" parent="HUD"]
+anchor_right = 1.0
+anchor_top = 0.5
+anchor_bottom = 0.5
+offset_top = -488.0
+offset_bottom = -176.0
+horizontal_alignment = 1
+vertical_alignment = 1
+theme_override_colors/font_color = Color(0.98, 0.66, 0.81, 1)
+theme_override_constants/outline_size = 0
+theme_override_fonts/font = ExtResource("TitleFont")
+theme_override_font_sizes/font_size = 177
+text = "Bouncy Cats"
+
+[node name="Message" type="Label" parent="HUD"]
+anchor_left = 0.5
+anchor_right = 0.5
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_left = -885.0
+offset_right = 885.0
+offset_top = -215.0
+offset_bottom = -21.0
+theme_override_colors/font_color = Color(0.85, 0.48, 0.66, 1)
+theme_override_colors/font_outline_color = Color(0.53, 0.26, 0.40, 0.88)
+theme_override_constants/outline_size = 1
+theme_override_fonts/font = ExtResource("SmallFont")
+theme_override_font_sizes/font_size = 63
+text = "Press Space to start"
+horizontal_alignment = 1
+vertical_alignment = 2
+
+[node name="BoostNotice" type="Label" parent="HUD"]
+visible = false
+anchor_left = 0.0
+anchor_right = 1.0
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_top = -125.0
+offset_bottom = -40.0
+horizontal_alignment = 1
+vertical_alignment = 1
+mouse_filter = 2
+theme_override_colors/font_color = Color(1, 0.82, 0.9, 1)
+theme_override_colors/font_outline_color = Color(0.38, 0.18, 0.29, 1)
+theme_override_constants/outline_size = 4
+theme_override_fonts/font = ExtResource("SmallFont")
+theme_override_font_sizes/font_size = 57
+text = "Speed boost!"
+
+[node name="AvatarPicker" parent="HUD" instance=ExtResource("Picker")]
+
+[connection signal="timeout" from="SpawnTimer" to="." method="_on_spawn_timer_timeout"]
+
+[connection signal="timeout" from="BoostNoticeTimer" to="HUD/BoostNotice" method="hide"]

@@ -1,0 +1,53 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://cat.gd" id="Cat"]
+
+[sub_resource type="PhysicsMaterial" id="Bounce"]
+friction = 0.0
+bounce = 0.5
+
+[sub_resource type="Animation" id="Spin"]
+resource_name = "lollipop"
+length = 1.0
+tracks/0/type = "value"
+tracks/0/path = NodePath("Sprite2D:rotation")
+tracks/0/interp = 1
+tracks/0/keys = {"times": PackedFloat32Array(0, 0.5, 0.75, 1), "transitions": PackedFloat32Array(1, 1, 1, 1), "update": 0, "values": [0.0, 12.56637, 17.0, 18.849556]}
+tracks/1/type = "value"
+tracks/1/path = NodePath("Sprite2D:modulate:a")
+tracks/1/interp = 1
+tracks/1/keys = {"times": PackedFloat32Array(0, 0.72, 1), "transitions": PackedFloat32Array(1, 1, 1), "update": 0, "values": [1.0, 0.18, 1.0]}
+
+[sub_resource type="AnimationLibrary" id="CatAnimations"]
+_data = {&"lollipop": SubResource("Spin")}
+
+[node name="Cat" type="RigidBody2D"]
+collision_mask = 3
+physics_material_override = SubResource("Bounce")
+gravity_scale = 0.0
+lock_rotation = true
+continuous_cd = 2
+can_sleep = false
+contact_monitor = true
+max_contacts_reported = 32
+linear_damp_mode = 1
+linear_damp = 0.0
+script = ExtResource("Cat")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+texture_filter = 4
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+callback_mode_process = 0
+libraries = {&"": SubResource("CatAnimations")}
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="."]
+
+[node name="EatArea" type="Area2D" parent="."]
+collision_layer = 0
+collision_mask = 1
+monitorable = false
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="EatArea"]
+
+[connection signal="body_entered" from="." to="." method="_on_body_entered"]
